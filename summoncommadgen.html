@@ -1,0 +1,231 @@
+<!DOCTYPE html> 
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Power Summon Command Generator</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <link rel="stylesheet" type="text/css" href="light.css">
+    <h1>Summon Command Generator</h1>
+
+    <form id="summonForm">
+        <div class="section">
+            <label for="mobType">Select Mob:</label>
+            <select id="mobType" name="mobType">
+                <!-- List of entities -->
+                <optgroup label="Passive Mobs">
+                    <option value="minecraft:cow">Cow</option>
+                    <option value="minecraft:pig">Pig</option>
+                    <option value="minecraft:sheep">Sheep</option>
+                    <option value="minecraft:chicken">Chicken</option>
+                    <option value="minecraft:villager">Villager</option>
+                    <option value="minecraft:bee">Bee</option>
+                    <option value="minecraft:fox">Fox</option>
+                    <option value="minecraft:axolotl">Axolotl</option>
+                    <option value="minecraft:horse">Horse</option>
+                    <option value="minecraft:wolf">Wolf</option>
+                    <option value="minecraft:cat">Cat</option>
+                </optgroup>
+                <optgroup label="Hostile Mobs">
+                    <option value="minecraft:zombie">Zombie</option>
+                    <option value="minecraft:skeleton">Skeleton</option>
+                    <option value="minecraft:creeper">Creeper</option>
+                    <option value="minecraft:enderman">Enderman</option>
+                    <option value="minecraft:spider">Spider</option>
+                    <option value="minecraft:wither_skeleton">Wither Skeleton</option>
+                    <option value="minecraft:blaze">Blaze</option>
+                    <option value="minecraft:ghast">Ghast</option>
+                    <option value="minecraft:witch">Witch</option>
+                    <option value="minecraft:wither">Wither</option>
+                </optgroup>
+                <optgroup label="Bosses">
+                    <option value="minecraft:ender_dragon">Ender Dragon</option>
+                    <option value="minecraft:wither">Wither</option>
+                    <option value="minecraft:elder_guardian">Elder Guardian</option>
+                </optgroup>
+                <optgroup label="Projectiles">
+                    <option value="minecraft:fireball">Fireball</option>
+                    <option value="minecraft:arrow">Arrow</option>
+                    <option value="minecraft:snowball">Snowball</option>
+                    <option value="minecraft:egg">Egg</option>
+                    <option value="minecraft:ender_pearl">Ender Pearl</option>
+                </optgroup>
+                <optgroup label="Vehicles">
+                    <option value="minecraft:boat">Boat</option>
+                    <option value="minecraft:minecart">Minecart</option>
+                    <option value="minecraft:minecart_with_chest">Minecart with Chest</option>
+                    <option value="minecraft:minecart_with_tnt">Minecart with TNT</option>
+                    <option value="minecraft:minecart_with_hopper">Minecart with Hopper</option>
+                </optgroup>
+                <optgroup label="Miscellaneous">
+                    <option value="minecraft:armor_stand">Armor Stand</option>
+                    <option value="minecraft:item">Item</option>
+                    <option value="minecraft:lightning_bolt">Lightning Bolt</option>
+                    <option value="minecraft:falling_block">Falling Block</option>
+                </optgroup>
+            </select><br>
+
+            <label for="customName">Custom Name:</label>
+            <input type="text" id="customName" name="customName" placeholder="Enter custom name (optional)"><br>
+
+            <label for="customHealth">Custom Health:</label>
+            <input type="number" id="customHealth" name="customHealth" placeholder="Health (e.g., 40 for 20 hearts)" min="1"><br>
+
+            <label for="coordinates">Coordinates:</label>
+            <input type="text" id="xCoord" name="xCoord" placeholder="X" size="3">
+            <input type="text" id="yCoord" name="yCoord" placeholder="Y" size="3">
+            <input type="text" id="zCoord" name="zCoord" placeholder="Z" size="3"><br>
+        </div>
+
+        <div class="section">
+            <h3>Equipment (Optional)</h3>
+            <label for="mainHand">Main Hand:</label>
+            <select id="mainHand">
+                <option value="">None</option>
+                <option value="minecraft:diamond_sword">Diamond Sword</option>
+                <option value="minecraft:bow">Bow</option>
+                <option value="minecraft:netherite_axe">Netherite Axe</option>
+            </select><br>
+
+            <label for="helmet">Helmet:</label>
+            <select id="helmet">
+                <option value="">None</option>
+                <option value="minecraft:diamond_helmet">Diamond Helmet</option>
+                <option value="minecraft:netherite_helmet">Netherite Helmet</option>
+            </select><br>
+
+            <label for="chestplate">Chestplate:</label>
+            <select id="chestplate">
+                <option value="">None</option>
+                <option value="minecraft:diamond_chestplate">Diamond Chestplate</option>
+                <option value="minecraft:netherite_chestplate">Netherite Chestplate</option>
+            </select><br>
+
+            <label for="leggings">Leggings:</label>
+            <select id="leggings">
+                <option value="">None</option>
+                <option value="minecraft:diamond_leggings">Diamond Leggings</option>
+                <option value="minecraft:netherite_leggings">Netherite Leggings</option>
+            </select><br>
+
+            <label for="boots">Boots:</label>
+            <select id="boots">
+                <option value="">None</option>
+                <option value="minecraft:diamond_boots">Diamond Boots</option>
+                <option value="minecraft:netherite_boots">Netherite Boots</option>
+            </select><br>
+        </div>
+
+        <div class="section">
+            <h3>Status Effects (Optional)</h3>
+            <label for="effect">Add Effect:</label>
+            <select id="effect">
+                <option value="">None</option>
+                <option value="minecraft:speed">Speed</option>
+                <option value="minecraft:strength">Strength</option>
+                <option value="minecraft:invisibility">Invisibility</option>
+            </select>
+            <label for="effectDuration">Duration (ticks):</label>
+            <input type="number" id="effectDuration" name="effectDuration" placeholder="200 (for 10 seconds)">
+        </div>
+
+        <button type="submit">Generate Summon Command</button>
+    </form>
+
+    <h2>Generated Command</h2>
+    <div id="command-output"></div>
+
+    <!-- Copy Button -->
+    <button id="copyCommandBtn" style="display:none;">Copy Command</button>
+    <p id="copyStatus" style="color:green;"></p>
+
+    <script>
+        document.getElementById('summonForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get values from the form
+            const mobType = document.getElementById('mobType').value;
+            const customName = document.getElementById('customName').value;
+            const customHealth = document.getElementById('customHealth').value;
+
+            // Get coordinates (if any)
+            const xCoord = document.getElementById('xCoord').value || '~';
+            const yCoord = document.getElementById('yCoord').value || '~';
+            const zCoord = document.getElementById('zCoord').value || '~';
+
+            // Get equipment values
+            const mainHand = document.getElementById('mainHand').value;
+            const helmet = document.getElementById('helmet').value;
+            const chestplate = document.getElementById('chestplate').value;
+            const leggings = document.getElementById('leggings').value;
+            const boots = document.getElementById('boots').value;
+
+            // Get effect (if any)
+            const effect = document.getElementById('effect').value;
+            const effectDuration = document.getElementById('effectDuration').value || 200;
+
+            // Start building the command
+            let command = `/summon ${mobType} ${xCoord} ${yCoord} ${zCoord} `;
+
+            // Add NBT tags for name, health, equipment, and effects
+            let nbtTags = [];
+
+            // Add custom name (if provided)
+            if (customName) {
+                nbtTags.push(`CustomName:"\\"${customName}\\""`);
+            }
+
+            // Add custom health (if provided)
+            if (customHealth) {
+                nbtTags.push(`Health:${customHealth}f`);
+            }
+
+            // Add equipment (if any)
+            let equipment = [];
+            equipment.push(mainHand ? `{id:${mainHand},Count:1b}` : `{}`);
+            equipment.push(boots ? `{id:${boots},Count:1b}` : `{}`);
+            equipment.push(leggings ? `{id:${leggings},Count:1b}` : `{}`);
+            equipment.push(chestplate ? `{id:${chestplate},Count:1b}` : `{}`);
+            equipment.push(helmet ? `{id:${helmet},Count:1b}` : `{}`);
+
+            if (equipment.some(e => e !== `{}`)) {
+                nbtTags.push(`ArmorItems:[${equipment.join(',')}]`);
+            }
+
+            // Add status effects (if any)
+            if (effect) {
+                nbtTags.push(`ActiveEffects:[{Id:${effect.replace('minecraft:', '')},Duration:${effectDuration}}]`);
+            }
+
+            // Finalize NBT part of the command
+            if (nbtTags.length > 0) {
+                command += `{${nbtTags.join(',')}}`;
+            }
+
+            // Display the generated command
+            document.getElementById('command-output').innerText = command;
+
+            // Show the copy button
+            document.getElementById('copyCommandBtn').style.display = 'inline';
+        });
+
+        // Copy Command Button Logic
+        document.getElementById('copyCommandBtn').addEventListener('click', function() {
+            const commandText = document.getElementById('command-output').innerText;
+            
+            if (commandText) {
+                navigator.clipboard.writeText(commandText).then(function() {
+                    document.getElementById('copyStatus').innerText = "Command copied to clipboard!";
+                }).catch(function(err) {
+                    console.error('Failed to copy command: ', err);
+                    document.getElementById('copyStatus').innerText = "Failed to copy the command.";
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
+

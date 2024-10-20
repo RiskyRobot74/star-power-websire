@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <script>
+       function Homethere() {
+        alert("You Are Currently on the home page")
+       }
+       const modpackId = y5AKx9jl;
+
+       / Correctly defined modpackId as a string
+        const modpackId = "y5AKx9jl"; 
+
+        function Homethere() {
+            alert("You Are Currently on the home page");
+        }
+
+        // Async function to fetch download count
+        async function fetchDownloadCount() {
+            try {
+                // Fetch the modpack data using the modpack ID
+                const response = await fetch(`https://api.modrinth.com/v2/project/${modpackId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch modpack data.');
+                }
+
+                const data = await response.json();
+
+                // Extract the download count from the response
+                const downloadCount = data.downloads;
+
+                // Display download count in the element with ID 'counter'
+                document.getElementById('counter').innerText = `Downloads: ${downloadCount}`;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('counter').innerText = 'Failed to load download count.';
+            }
+        }
+
+        // Fetch download count when the page loads
+        fetchDownloadCount();
+    </script>
+</body>
+</html>
+    </script>
+    <head>
+    
+    </head>
+<title>Star Power</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico"
+
+<body>
+    <link rel="stylesheet" type="text/css" href="light.css">
+    <div class="center-img">
+<img src="star power logo.png" width="400" height="390" >
+
+</div>  
+<br>
+<div class="Page Selctor"></div>
+<form>
+    <button onclick="Homethere()">Home</Button>
+    <Button type="submit" formaction="/downloads.html">Downloads</button>
+        <Button type="submit" formaction="/minecrafttools.html">Minecraft tools</button>
+    </form>
+<html>
+</div>
+    <br>
+    <h1>Download Count</h1>
+    <div id="counter" style="text-align: center;">Loading...</div>
+    <br>
+    <h1>Modpack Description</h1>
+    <div class="Modpack Description">
+        <p><img src="https://cdn.modrinth.com/data/cached_images/8fd164f106bada789cb464c7a3a10c0b8b3d65f3.gif" alt="Star Power Banner"></p>
+<p><a target="_blank" href="https://minecraftcapes.net/gallery/b370de03a6058cc375b601fbf3f20bca3e32c9e3507e3d27abfb93f72f435e4f">Get The Cape</a></p>
+<details>
+
+<summary>Mods</summary>
+
+- Sodium
+- Bad Horse Fix
+- Better Statistics Screen
+- Bobby
+- Better F3
+- Cloth Config API
+- Clumps
+- Debugify
+- Distant Horizons
+- Dynamic FPS
+- Entity Culling
+- Fabric API
+- Head Name Fix
+- ImmediatelyFast
+- Indium
+- Iris Shaders
+- Let Me Despawn
+- Lithium
+- Methane
+- Mod Menu
+- Model Gap Fix
+- ModernFix
+- Noxesium
+- Nvidium
+- Reeses&#39;s Sodium Options
+- Server Pinger Fixer
+- Sodium Extra
+- TCDCommons API
+- Text Placeholder API
+- Tooltip Scroll
+- Very Many Players (Fabric)
+- YetAnotherConfigLib
+- Your Options Shall Be Respected
+- spark
+
+</details>
+
+
+<details>
+<summary>Resource Packs</summary>
+- Fast Better Grass
+</details>
+
+
+
+<p>Star Power Is a Modpack That Makes Your FPS Get a Big Boost and it has shader Support</p>
+<h2 id="shader-support">Shader Support</h2>
+<p>The Modpack Uses The Mod iris To Have Shaders Suport witch Is a Mod That Makes a Shader engine</p>
+<h2 id="fps">FPS</h2>
+<p>This Modpack Uses Lots Of FPS Mod to make Your FPS Good With These Mods</p>
+<ul>
+<li>Sodium</li>
+<li>Sodium Extra</li>
+<li>And More</li>
+</ul>
+<h2 id="no-bugs">No Bugs</h2>
+<p>This Modpack Should have no Bugs in it</p>
+    </div>

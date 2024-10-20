@@ -1,0 +1,88 @@
+table, th, td{
+    border: 1px solid #d8d8d8;
+    font: small-caption;
+    font-size: medium;
+    border-radius: 10px;
+  }
+  .center-img { 
+    text-align: center; 
+}
+button {
+    border: 1px solid #d8d8d8;
+    font: small-caption;
+    font-size: medium;
+    border-radius: 10px;
+    margin: 1px #d8d8d8;
+    cursor: pointer;
+}
+h1 {
+    font: small-caption;
+    font-size: xx-large
+}
+p {
+    font: small-caption;
+    font-size: medium;
+}
+a {
+  font: small-caption;
+    font-size: medium;
+}
+h2 {
+    font: small-caption;
+    font-size: x-large;
+}
+summary, details{
+    font: small-caption;
+    font-size: medium;
+}
+#counter {
+    font-size: 2em;
+    font-weight: bold;
+  }
+  div {
+    font: small-caption;
+    font-size: large;
+  }
+  h3 {
+    font: small-caption;
+    font-size: larger;
+  }
+  h4 {
+    font: small-caption;
+    font-size: large;
+  }
+  h5 {
+    font: small-caption;
+    font-size: medium;
+  }
+  a {
+    font: small-caption;
+    font-size: large;
+  }
+  input {
+    font: small-caption;
+    font-size: medium;
+    border-radius: 12px;
+    margin: 1px #d8d8d8;
+    border: 3px solid #d8d8d8;
+    cursor: pointer;
+  }
+  select {
+    font: small-caption;
+    font-size: small;
+    border-radius: 12px;
+    margin: 1px #d8d8d8;
+    border: 3px solid #d8d8d8;
+  }
+  label {
+    font: small-caption;
+    font-size: large;
+  }
+  option {
+    font: small-caption;
+    font-size: small;
+    border-radius: 1px;
+    background-origin: padding-box;
+    margin: 1px #d8d8d8;
+    border: 3px solid #d8d8d8;
+  }

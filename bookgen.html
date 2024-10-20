@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Power Book Command Generator</title>
+    <link rel="stylesheet" type="text/css" href="light.css">
+    <style>
+        .page-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .page-content {
+            flex: 1;
+        }
+        .features {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .features img {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .features select {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Book Command Generator</h1>
+
+<form id="bookForm">
+    <h3>Book Title</h3>
+    <input type="text" id="title" name="title" placeholder="Enter book title" required><br>
+
+    <h3>Author Name</h3>
+    <input type="text" id="author" name="author" placeholder="Enter author name" required><br>
+
+    <h3>Pages</h3>
+    <div id="pages">
+        <div class="page-section" id="page1">
+            <textarea class="page-content" id="pageText1" name="pageText1" placeholder="Page 1 content" required></textarea>
+            <div class="features">
+                <img src="bold-icon.png" title="Bold" id="bold1">
+                <img src="italic-icon.png" title="Italic" id="italic1">
+                <img src="underline-icon.png" title="Underline" id="underlined1">
+                <img src="strikethrough-icon.png" title="Strikethrough" id="strikethrough1">
+                <select id="color1">
+                    <option value="none">Color</option>
+                    <option value="black">Black</option>
+                    <option value="dark_blue">Dark Blue</option>
+                    <option value="dark_green">Dark Green</option>
+                    <option value="red">Red</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="white">White</option>
+                    <!-- Add more colors if needed -->
+                </select>
+                <input type="checkbox" id="clickEvent1" title="Click Event">
+                <input type="checkbox" id="hoverEvent1" title="Hover Text">
+            </div>
+        </div>
+    </div>
+    <button type="button" onclick="addPage()">Add Another Page</button><br><br>
+
+    <input type="submit" value="Generate Book Command">
+</form>
+
+<h2>Generated Command</h2>
+<div id="command-output"></div>
+
+<!-- Copy Button -->
+<button id="copyCommandBtn" style="display:none;">Copy Command</button>
+<p id="copyStatus" style="color:green;"></p>
+
+<script>
+    let pageCount = 1;
+
+    // Function to add another page
+    function addPage() {
+        pageCount++;
+        const pagesDiv = document.getElementById('pages');
+        const newPageDiv = document.createElement('div');
+        newPageDiv.className = "page-section";
+        newPageDiv.id = `page${pageCount}`;
+
+        newPageDiv.innerHTML = `
+            <textarea class="page-content" id="pageText${pageCount}" name="pageText${pageCount}" placeholder="Page ${pageCount} content" required></textarea>
+            <div class="features">
+                <img src="bold-icon.png" title="Bold" id="bold${pageCount}">
+                <img src="italic-icon.png" title="Italic" id="italic${pageCount}">
+                <img src="underline-icon.png" title="Underline" id="underlined${pageCount}">
+                <img src="strikethrough-icon.png" title="Strikethrough" id="strikethrough${pageCount}">
+                <select id="color${pageCount}">
+                    <option value="none">Color</option>
+                    <option value="black">Black</option>
+                    <option value="dark_blue">Dark Blue</option>
+                    <option value="dark_green">Dark Green</option>
+                    <option value="red">Red</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="white">White</option>
+                </select>
+                <input type="checkbox" id="clickEvent${pageCount}" title="Click Event">
+                <input type="checkbox" id="hoverEvent${pageCount}" title="Hover Text">
+            </div>
+        `;
+
+        pagesDiv.appendChild(newPageDiv);
+    }
+
+    // Event listener to generate the book command
+    document.getElementById('bookForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        // Get title and author
+        const title = document.getElementById('title').value;
+        const author = document.getElementById('author').value;
+
+        // Get all the pages
+        const pages = [];
+        for (let i = 1; i <= pageCount; i++) {
+            const pageContent = document.getElementById(`pageText${i}`).value;
+            
+            // Get text formatting options
+            const isBold = document.getElementById(`bold${i}`).classList.contains('active') ? '"bold":true,' : '';
+            const isItalic = document.getElementById(`italic${i}`).classList.contains('active') ? '"italic":true,' : '';
+            const isUnderlined = document.getElementById(`underlined${i}`).classList.contains('active') ? '"underlined":true,' : '';
+            const isStrikethrough = document.getElementById(`strikethrough${i}`).classList.contains('active') ? '"strikethrough":true,' : '';
+            const color = document.getElementById(`color${i}`).value !== 'none' ? `"color":"${document.getElementById(`color${i}`).value}",` : '';
+
+            // Create JSON for the page
+            const pageJson = `{"text":"${pageContent}",${isBold}${isItalic}${isUnderlined}${isStrikethrough}${color}}`;
+            pages.push(pageJson);
+        }
+
+        // Construct the command
+        let command = `/give @p minecraft:written_book{title:"${title}",author:"${author}",pages:[${pages.join(',')}]} 1`;
+
+        // Display the command
+        document.getElementById('command-output').innerText = command;
+
+        // Show the copy button
+        document.getElementById('copyCommandBtn').style.display = 'inline';
+    });
+
+    // Copy Command Button Logic
+    document.getElementById('copyCommandBtn').addEventListener('click', function() {
+        const commandText = document.getElementById('command-output').innerText;
+        
+        if (commandText) {
+            navigator.clipboard.writeText(commandText).then(function() {
+                document.getElementById('copyStatus').innerText = "Command copied to clipboard!";
+            }).catch(function(err) {
+                console.error('Failed to copy command: ', err);
+                document.getElementById('copyStatus').innerText = "Failed to copy the command.";
+            });
+        }
+    });
+
+    // Event delegation to toggle formatting icons
+    document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'IMG') {
+            e.target.classList.toggle('active');
+            e.target.style.filter = e.target.classList.contains('active') ? 'brightness(150%)' : 'none';
+        }
+    });
+</script>
+
+</body>
+</html>

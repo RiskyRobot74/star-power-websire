@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Power Firework Command Generator</title>
+    <link rel="stylesheet" type="text/css" href="light.css"> <!-- Correct placement of external CSS -->
+</head>
+<body>
+
+<h1>Firework Command Generator</h1>
+
+<form id="fireworkForm">
+    <h3>Flight Duration (1-255)</h3>
+    <input type="number" id="flight" name="flight" min="1" max="255" value="1">
+
+    <h3>Explosion Shape</h3>
+    <select id="shape" name="shape">
+        <option value="small_ball">Small Ball</option>
+        <option value="large_ball">Large Ball</option>
+        <option value="star">Star</option>
+        <option value="creeper">Creeper</option>
+        <option value="burst">Burst</option>
+    </select>
+
+    <h3>Primary Colors</h3>
+    <input type="checkbox" id="colorRed" name="colorRed"> Red<br>
+    <input type="checkbox" id="colorBlue" name="colorBlue"> Blue<br>
+    <input type="checkbox" id="colorGreen" name="colorGreen"> Green<br>
+    <input type="checkbox" id="colorYellow" name="colorYellow"> Yellow<br>
+    <input type="checkbox" id="colorWhite" name="colorWhite"> White<br>
+    <input type="checkbox" id="colorBlack" name="colorBlack"> Black<br>
+
+    <h3>Fade Colors (Optional)</h3>
+    <input type="checkbox" id="fadeRed" name="fadeRed"> Red<br>
+    <input type="checkbox" id="fadeBlue" name="fadeBlue"> Blue<br>
+    <input type="checkbox" id="fadeGreen" name="fadeGreen"> Green<br>
+    <input type="checkbox" id="fadeYellow" name="fadeYellow"> Yellow<br>
+    <input type="checkbox" id="fadeWhite" name="fadeWhite"> White<br>
+    <input type="checkbox" id="fadeBlack" name="fadeBlack"> Black<br>
+
+    <h3>Special Effects</h3>
+    <input type="checkbox" id="trail" name="trail"> Trail<br>
+    <input type="checkbox" id="flicker" name="flicker"> Twinkle<br>
+
+    <br>
+    <button type="submit">Generate Firework Command</button>
+</form>
+
+<h2>Generated Command</h2>
+<div id="command-output"></div>
+
+<!-- Copy Button -->
+<button id="copyCommandBtn" style="display:none;">Copy Command</button>
+<p id="copyStatus" style="color:green;"></p> <!-- For displaying copy status -->
+
+<h2>Firework 2D Preview</h2>
+<canvas id="fireworkCanvas" width="300" height="300" style="border:1px solid black;"></canvas>
+
+<script>
+    const colorMap = {
+        'Red': { hex: 16711680, rgb: 'rgb(255, 0, 0)' },
+        'Blue': { hex: 255, rgb: 'rgb(0, 0, 255)' },
+        'Green': { hex: 65280, rgb: 'rgb(0, 255, 0)' },
+        'Yellow': { hex: 16776960, rgb: 'rgb(255, 255, 0)' },
+        'White': { hex: 16777215, rgb: 'rgb(255, 255, 255)' },
+        'Black': { hex: 0, rgb: 'rgb(0, 0, 0)' }
+    };
+
+    document.getElementById('fireworkForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        
+        // Get flight duration
+        const flightDuration = document.getElementById('flight').value;
+        
+        // Get explosion shape
+        const shape = document.getElementById('shape').value;
+        
+        // Get selected colors
+        const colors = [];
+        const fadeColors = [];
+        
+        ['Red', 'Blue', 'Green', 'Yellow', 'White', 'Black'].forEach(color => {
+            if (document.getElementById(`color${color}`).checked) {
+                colors.push(colorMap[color].rgb); // Use RGB for drawing
+            }
+            if (document.getElementById(`fade${color}`).checked) {
+                fadeColors.push(colorMap[color].rgb); // Use RGB for drawing
+            }
+        });
+
+        // Get special effects
+        const hasTrail = document.getElementById('trail').checked ? '1b' : '0b';
+        const hasTwinkle = document.getElementById('flicker').checked ? '1b' : '0b';
+
+        // Build the command
+        let command = `/give @a firework_rocket[fireworks={flight_duration:${flightDuration},explosions:[{has_twinkle:${hasTwinkle},shape:${shape},colors:[I;${colors.map(color => colorMap[color].hex).join(',')}]`;
+        
+        // Add fade colors if any
+        if (fadeColors.length > 0) {
+            command += `,fade_colors:[I;${fadeColors.map(color => colorMap[color].hex).join(',')}]`;
+        }
+
+        // Add trail
+        command += `,has_trail:${hasTrail}}]}]`;
+
+        // Display the generated command
+        document.getElementById('command-output').innerText = command;
+
+        // Show the copy button
+        document.getElementById('copyCommandBtn').style.display = 'inline';
+
+        // Draw the 2D firework render
+        drawFireworkRender(colors, shape, hasTrail, hasTwinkle);
+    });
+
+    // Copy Command Button Logic
+    document.getElementById('copyCommandBtn').addEventListener('click', function() {
+        const commandText = document.getElementById('command-output').innerText;
+        
+        if (commandText) {
+            // Copy the text to clipboard
+            navigator.clipboard.writeText(commandText).then(function() {
+                // Display a success message
+                document.getElementById('copyStatus').innerText = "Command copied to clipboard!";
+            }).catch(function(err) {
+                console.error('Failed to copy command: ', err);
+                document.getElementById('copyStatus').innerText = "Failed to copy the command.";
+            });
+        }
+    });
+
+    // Function to draw the 2D firework render
+    function drawFireworkRender(colors, shape, hasTrail, hasTwinkle) {
+        const canvas = document.getElementById('fireworkCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Clear previous drawings
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw trail if applicable
+        if (hasTrail === '1b') {
+            ctx.beginPath();
+            ctx.moveTo(150, 300); // Bottom center
+            ctx.lineTo(150, 150); // Moving upwards
+            ctx.strokeStyle = 'gray';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        // Draw explosion shape
+        const radius = shape === 'large_ball' ? 80 : shape === 'small_ball' ? 40 : 60;
+        const numParticles = 20;
+        const centerX = 150;
+        const centerY = 150;
+
+        colors.forEach((color) => {
+            for (let i = 0; i < numParticles; i++) {
+                const angle = (i / numParticles) * 2 * Math.PI;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = color;
+                ctx.fill();
+            }
+        });
+
+        // Add twinkle effect (simple shimmer)
+        if (hasTwinkle === '1b') {
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 10, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'yellow';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+    }
+</script>
+
+</body>
+</html>

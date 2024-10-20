@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+</head>
+<title>Star Power Give Command Generator</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<body>
+    <link rel="stylesheet" type="text/css" href="light.css">
+    <h1>Give Command Generator</h1>
+    <br>
+    <Form id="giveCommandForm">
+        <h3>Minecraft Player Username</h3>
+        <h5>eg. Steve</h5>
+        <input type="text" id="uname" name="uname">
+        <br>
+        <h3>Item to Give</h3>
+        <h5>eg. Stone</h5>
+        <input type="text" id="item" name="item">
+        <br>
+        <h3>Amount of item</h3>
+        <h5>eg. 64</h5>
+        <input type="text" id="itema" name="itema">
+        <br>
+        <h3>Item Name (Optional)</h3>
+        <input type="text" id="itemname" name="itemname">
+        <br>
+        <br>
+        <input type="submit" value="Generate">
+    </Form>
+    <br>
+    <h2>Generated Command</h2>
+    <div id="command-output"></div>
+    <br>
+    <button id="copyCommandBtn" style="display:none;">Copy Command</button>
+<p id="copyStatus" style="color:green;"></p>
+
+
+    <script>
+    document.getElementById('giveCommandForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        
+        // Get input values
+        const username = document.getElementById('uname').value.trim();
+        let item = document.getElementById('item').value.trim();
+        const amount = document.getElementById('itema').value.trim();
+        const itemName = document.getElementById('itemname').value.trim();
+        
+        item = item.replace(/ /g, '_'); // Replace spaces in item with underscores
+
+        // Check if required fields are filled
+        if (!username || !item || !amount) {
+            document.getElementById('command-output').innerText = "Please fill out all required fields.";
+            document.getElementById('copyCommandBtn').style.display = 'none'; // Hide the copy button
+            return;
+        }
+
+        // Start creating the command
+        let command = `/give ${username} ${item} ${amount}`;
+        
+        // Add custom name if provided
+        if (itemName) {
+            command += ` {display:{Name:'{"text":"${itemName}","italic":false}'}}`;
+        }
+        
+        // Display the command
+        document.getElementById('command-output').innerText = command;
+        
+        // Show the copy button once the command is generated
+        document.getElementById('copyCommandBtn').style.display = 'inline';
+    });
+
+    // Copy Command Button Logic
+    document.getElementById('copyCommandBtn').addEventListener('click', function() {
+        const commandText = document.getElementById('command-output').innerText;
+        
+        if (commandText && commandText !== "Please fill out all required fields.") {
+            // Check if Clipboard API is available
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                // Copy the text to clipboard
+                navigator.clipboard.writeText(commandText).then(function() {
+                    // Display a success message
+                    document.getElementById('copyStatus').innerText = "Command copied to clipboard!";
+                }).catch(function(err) {
+                    console.error('Failed to copy command: ', err);
+                    document.getElementById('copyStatus').innerText = "Failed to copy the command.";
+                });
+            } else {
+                // Fallback: manual copy for older browsers
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = commandText;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                try {
+                    document.execCommand('copy');
+                    document.getElementById('copyStatus').innerText = "Command copied to clipboard!";
+                } catch (err) {
+                    console.error('Failed to copy command: ', err);
+                    document.getElementById('copyStatus').innerText = "Failed to copy the command.";
+                }
+                document.body.removeChild(tempTextArea); // Clean up the temporary text area
+            }
+        }
+    });
+
+
+
+
+        
+    </script>
+</body>
